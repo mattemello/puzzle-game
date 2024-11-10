@@ -1,0 +1,16 @@
+html,
+body {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+canvas {
+    position: center;
+    //border: solid;
+    margin: 0;
+    //width: 200px;
+    //height: 200px;
+    width: 100px;
+    height: 100px;
+}
