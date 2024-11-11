@@ -5,8 +5,16 @@ body {
     padding: 0;
 }
 
-canvas {
+table, th, td {
+    width: 100%;
     position: center;
+  border: 1px solid;
+}
+
+#canvas {
+    
+    /*TODO: found a way to implemente the absolute fiture without make it collaps*/ 
+    position: absolute;
     //border: solid;
     margin: 0;
     //width: 200px;

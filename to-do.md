@@ -9,3 +9,5 @@
 write down ↓ my daily-do goals when i do this project
 
 # little acvment to do daily
+
+[ ] create a canvas over the other canvas
