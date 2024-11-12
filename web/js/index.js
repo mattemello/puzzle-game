@@ -11,38 +11,50 @@ const dimension = {
 let ctx = [];
 
 function init() {
-    let cont = document.getElementById("tableGame");
+    let tableGame = document.getElementById("tableGame");
     let position = 0
 
-    for (let i = 0; i < dimension.rows; i++) {
-        cont.innerHTML += "<tr>"
-
-        for (let j = 0; j < dimension.collo; j++) {
-            cont.innerHTML += '<th><canvas class="canvas" id="canvas" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas></th>';
+    /* FIX: use this
+     *
+    for (let i = 0; i < 10; ++i) {
+        const tr = tableGame.insertRow();
+        for (let j = 0; j < 10; ++j) {
+            const td = tr.insertCell();
+        }
+    }*/
+    for (let i = 0; i < dimension.rows; ++i) {
+        const tr = tableGame.insertRow();
+        for (let j = 0; j < dimension.collo; ++j) {
+            //cont.innerHTML += '<td><canvas class="canvas" id="canvas" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas></td>';
+            const td = tr.insertCell();
+            td.innerHTML = '<canvas class="canvas" id="canvas" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas>';
             ++position;
         }
 
-        cont.innerHTML += "</tr>"
     }
+
 
     const canvas = document.querySelectorAll("canvas");
 
     for (let i = 0; i < dimension.rows * dimension.collo; i++) {
         ctx[i] = canvas[i].getContext("2d");
-        if (i === 0) {
-            drawnChar(i, 0, 0);
-        }
         square(ctx[i]);
     }
+
+    tableGame.innerHTML = '<canvas class="hero" id="hero">Sorry, no canvas for you</canvas>';
+
+    const hero = document.getElementById("hero");
+
+    drawnChar(hero, 0, 0);
 }
 
-function drawnChar(i, x, y) {
+function drawnChar(hero, x, y) {
     console.log("enter");
-    ctx[i].rect(x, y, 100, 100);
-    ctx[i].lineWidth = 1;
-    ctx[i].stroke();
-    ctx[i].fillStyle = "black";
-    ctx[i].fill();
+    hero.rect(x, y, 100, 100);
+    hero.lineWidth = 1;
+    hero.stroke();
+    hero.fillStyle = "black";
+    hero.fill();
 }
 
 function square(ctx) {

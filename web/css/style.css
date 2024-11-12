@@ -2,23 +2,23 @@ html,
 body {
     text-align: center;
     margin: 0;
-    padding: 0;
+    /*padding: 0;*/
 }
 
 table, th, td {
-    width: 100%;
     position: center;
-  border: 1px solid;
+    border: 0px solid;
 }
 
-#canvas {
+.canvas {
     
     /*TODO: found a way to implemente the absolute fiture without make it collaps*/ 
-    position: absolute;
-    //border: solid;
+    position: relative;
     margin: 0;
-    //width: 200px;
-    //height: 200px;
     width: 100px;
     height: 100px;
+}
+
+.hero {
+    position: absolute;
 }
