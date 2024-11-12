@@ -12,7 +12,6 @@ table, th, td {
 
 .canvas {
     
-    /*TODO: found a way to implemente the absolute fiture without make it collaps*/ 
     position: relative;
     margin: 0;
     width: 100px;

@@ -14,20 +14,12 @@ function init() {
     let tableGame = document.getElementById("tableGame");
     let position = 0
 
-    /* FIX: use this
-     *
-    for (let i = 0; i < 10; ++i) {
-        const tr = tableGame.insertRow();
-        for (let j = 0; j < 10; ++j) {
-            const td = tr.insertCell();
-        }
-    }*/
     for (let i = 0; i < dimension.rows; ++i) {
         const tr = tableGame.insertRow();
         for (let j = 0; j < dimension.collo; ++j) {
             //cont.innerHTML += '<td><canvas class="canvas" id="canvas" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas></td>';
             const td = tr.insertCell();
-            td.innerHTML = '<canvas class="canvas" id="canvas" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas>';
+            td.innerHTML = '<canvas class="canvas" id="canvas' + position + '" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas>';
             ++position;
         }
 
@@ -41,9 +33,14 @@ function init() {
         square(ctx[i]);
     }
 
-    tableGame.innerHTML = '<canvas class="hero" id="hero">Sorry, no canvas for you</canvas>';
+    /*FIX: use this the hero do not appear */
+    /*TODO: do this ↓ but for all the canvas */
 
-    const hero = document.getElementById("hero");
+    document.getElementById('canvas0').style.position = "absolute";
+    document.getElementById('canvas0').style.left = 0;
+    document.getElementById('canvas0').style.top = 0;
+
+    hero = document.getElementById('hero');
 
     drawnChar(hero, 0, 0);
 }
