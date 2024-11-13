@@ -17,6 +17,7 @@ const dimensionGrid = {
 let ctx = [];
 
 function init() {
+    const container = document.getElementById('container');
     let position = 0
 
     let posl = 0;
@@ -24,10 +25,13 @@ function init() {
 
     for (let i = 0; i < dimensionGrid.rows; ++i) {
         for (let j = 0; j < dimensionGrid.collo; ++j) {
-            document.getElementById('container').innerHTML += '<canvas class="canvas" id="canvas' + position + '"style="position: center; margin: 0px; padding: 0px;" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas>';
+            container.innerHTML += '<canvas class="canvas" id="canvas' + position + '"style="position: center; margin: 0px; padding: 0px;" onmouseleave="backColor(' + position + ')" onmouseenter="changeColor(' + position + ')">Sorry, bet no canvas</canvas>';
             ++position;
             posl += dimensionCanvs.width;
         }
+
+        container.innerHTML += '<br>';
+
         posl = 0;
         post += dimensionCanvs.height;
     }
@@ -42,9 +46,6 @@ function init() {
         ctx[i] = canvas[i].getContext("2d");
         square(ctx[i]);
     }
-
-    /*FIX: use this the hero do not appear */
-
 
     const hero = document.getElementById('hero').getContext("2d");
 

@@ -10,11 +10,11 @@ func main() {
 	mux.Handle("/", http.FileServer(http.Dir("./web")))
 
 	srv := &http.Server{
-		Addr:    ":3001",
+		Addr:    ":3010",
 		Handler: mux,
 	}
 
-	log.Printf("Serving on port 3000\n")
+	log.Printf("Serving on port 3010\n")
 
 	log.Fatal(srv.ListenAndServe())
 
