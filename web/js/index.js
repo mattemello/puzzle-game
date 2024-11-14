@@ -23,19 +23,23 @@ function init() {
 
 function Arena() {
     let container = document.getElementById("container");
+    console.log(container);
     let dimension = 0;
 
     for (let i = 0; i < 5; ++i) {
         for (let j = 0; j < 5; ++j) {
-            container.innerHTML += '<canvas id="arena" tag="prov' + dimension + '>Sorry no cavs for you</canvas>';
+            container.appendChild('<canvas id="arena">Sorry no cavs for you</canvas>');
             canvs.position.x[dimension] = (42 * j);
             canvs.position.y[dimension] = (42 * i);
             ++dimension;
         }
     }
 
+    let temp = document.querySelectorAll("arena");
+
     for (let i = 0; i < 25; i++) {
-        canvs.element[i] = document.getElementById("arena");
+        console.log(temp);
+        canvs.element[i] = temp[i];
         console.log(canvs.element[i]);
         canvs.ctx[i] = canvs.element[i].getContext("2d");
         drawArena(canvs.ctx[i], canvs.position.x[i], canvs.position.y[i]);
