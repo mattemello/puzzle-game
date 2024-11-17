@@ -1,3 +1,10 @@
+const go = new Go();
+WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+
+    go.run(result.instance);
+
+});
+
 let canvs = {
     element: [],
     ctx: [],
@@ -17,24 +24,29 @@ let theHero = {
 };
 
 function init() {
-    Arena();
-    Hero();
 }
 
-function Arena() {
+function Arena(dimesionX, dimesionY) {
     let container = document.getElementById("container");
     let dimension = 0;
 
-    for (let i = 0; i < 5; ++i) {
-        for (let j = 0; j < 5; ++j) {
+    for (let i = 0; i < dimesionX; ++i) {
+
+        for (let j = 0; j < dimesionY; ++j) {
             let theArena = document.createElement('canvas');
             theArena.innerHTML = "Sorry no cavs for you";
             theArena.setAttribute('id', 'arena');
+
             container.appendChild(theArena);
+
             canvs.position.x[dimension] = (42 * j);
             canvs.position.y[dimension] = (42 * i);
+
             ++dimension;
         }
+
+        container.appendChild(document.createElement('br'));
+
     }
 
     let temp = container.querySelectorAll('canvas');

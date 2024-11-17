@@ -6,8 +6,9 @@ import (
 )
 
 func main() {
+
 	mux := http.NewServeMux()
-	mux.Handle("/", http.FileServer(http.Dir("./web")))
+	mux.Handle("/", http.FileServer(http.Dir("./assets/")))
 
 	srv := &http.Server{
 		Addr:    ":3010",

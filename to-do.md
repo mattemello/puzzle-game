@@ -5,11 +5,10 @@
 -> use typescript for the game ui.
 -> use go for the server.
 
+think about how to interact from go to js
+
 
 write down ↓ my daily-do goals when i do this project
 
 # little acvment to do daily
 
-[x] create a canvas over the other canvas
-[x] create the hero
-[ ] make all center
