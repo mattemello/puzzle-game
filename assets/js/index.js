@@ -1,12 +1,6 @@
 const go = new Go();
-let wasm;
-WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+//wasm.CreateTheArena();
 
-    wasm = result.instance;
-    go.run(wasm);
-    console.log(wasm);
-
-});
 
 let canvs = {
     element: [],
@@ -21,12 +15,26 @@ let theHero = {
     hero: null,
     ctxh: null,
     postion: {
-        x: 0,
-        y: 8
+        x: null,
+        y: null
     }
 };
 
-function init() {
+async function init() {
+    let result = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject)
+    const wasm = result.instance;
+    go.run(wasm);
+    console.log(wasm.exports);
+
+    start();
+    createHero();
+}
+
+function start() {
+    CreateTheArena();
+}
+function createHero() {
+    CreateTheHero();
 }
 
 function Arena(dimesionX, dimesionY) {
