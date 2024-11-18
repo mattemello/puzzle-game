@@ -2,49 +2,33 @@ package main
 
 import (
 	"fmt"
+	strctVar "github.com/mattemello/puzzle-game/cmd/wasm/structAndVar"
 	"strconv"
 	"syscall/js"
 )
 
-type Coordination struct {
-	x int
-	y int
-}
+var Arena strctVar.TheArena
 
-type theArena struct {
-	Dimension Coordination
-}
-
-type theHero struct {
-	Hero     js.Value
-	Ctxh     js.Value
-	Style    js.Value
-	Position Coordination
-	//Dimension Coordination
-}
-
-var Arena theArena
-
-var Hero theHero
+var Hero strctVar.TheHero
 
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
 
-	Arena.Dimension.x = 5
-	Arena.Dimension.y = 5
-	js.Global().Call("Arena", Arena.Dimension.x, Arena.Dimension.y)
+	Arena.Dimension.X = 5
+	Arena.Dimension.Y = 5
+	js.Global().Call("Arena", Arena.Dimension.X, Arena.Dimension.Y)
 
 	return nil
 }
 
 func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
-	Hero.Position.x = 0
-	Hero.Position.y = 8
+	Hero.Position.X = 0
+	Hero.Position.Y = 8
 
 	Hero.Style = Hero.Hero.Get("style")
 
-	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.x) + "px"))
-	Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.y) + "px"))
+	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.X) + "px"))
+	Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Y) + "px"))
 	js.Global().Call("Hero", Hero.Ctxh)
 
 	return nil
@@ -52,9 +36,9 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
 func MoveHero(this js.Value, args []js.Value) interface{} {
 
-	Hero.Position.x += 10
+	Hero.Position.X += 10
 
-	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.x) + "px"))
+	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.X) + "px"))
 
 	return nil
 }
