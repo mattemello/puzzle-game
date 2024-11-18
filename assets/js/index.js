@@ -1,6 +1,7 @@
 const go = new Go();
 //wasm.CreateTheArena();
 
+//TODO: use the map for mapping the key (hjkl)
 
 let canvs = {
     element: [],
@@ -69,12 +70,12 @@ function drawArena(ctx, x, y) {
 }
 
 function Hero(theHero) {
-
     theHero.beginPath();
     theHero.arc(170, 75, 50, 0, 10);
+
     theHero.fillStyle = "#b4befe";
     theHero.fill();
-    theHero.stroke();
 
+    theHero.stroke();
 }
 

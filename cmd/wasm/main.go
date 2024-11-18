@@ -2,14 +2,24 @@ package main
 
 import (
 	"fmt"
-	strctVar "github.com/mattemello/puzzle-game/cmd/wasm/structAndVar"
 	"strconv"
 	"syscall/js"
+
+	strctVar "github.com/mattemello/puzzle-game/cmd/wasm/structAndVar"
 )
+
+/* NOTE: the approssimative position of the circle hero:
+ * right: ~(-40)
+ * left: ~(-30)
+ * top: ~(-8)
+ * bottom: ~(-8)
+ */
 
 var Arena strctVar.TheArena
 
 var Hero strctVar.TheHero
+
+var doc = js.Global().Get("document")
 
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
 
@@ -22,8 +32,20 @@ func CreateTheArena(this js.Value, args []js.Value) interface{} {
 
 func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
-	Hero.Position.X = 0
-	Hero.Position.Y = 8
+	startArena := doc.Call("getElementById", "arena00")
+
+	x := startArena.Call("getBoundingClientRect").Get("left").Float()
+	y := startArena.Call("getBoundingClientRect").Get("top").Float()
+
+	fmt.Println(startArena)
+
+	fmt.Println(startArena.Call("getBoundingClientRect").Get("left").Float())
+	fmt.Println(startArena.Call("getBoundingClientRect").Get("top").Float())
+	fmt.Println(startArena.Call("getBoundingClientRect").Get("right").Float())
+	fmt.Println(startArena.Call("getBoundingClientRect").Get("bottom").Float())
+
+	Hero.Position.X = int(x) - 40
+	Hero.Position.Y = int(y)
 
 	Hero.Style = Hero.Hero.Get("style")
 
@@ -44,15 +66,6 @@ func MoveHero(this js.Value, args []js.Value) interface{} {
 }
 
 func main() {
-
-	fmt.Println("hello")
-
-	/*
-	   theHero.hero = document.getElementById("hero");
-	   theHero.ctxh = theHero.hero.getContext("2d");
-	*/
-
-	doc := js.Global().Get("document")
 
 	Hero.Hero = doc.Call("getElementById", "hero")
 	Hero.Ctxh = Hero.Hero.Call("getContext", "2d")
