@@ -36,7 +36,7 @@ function Arena(dimesionX, dimesionY) {
         for (let j = 0; j < dimesionY; ++j) {
             let theArena = document.createElement('canvas');
             theArena.innerHTML = "Sorry no cavs for you";
-            theArena.setAttribute('id', 'arena');
+            theArena.setAttribute('id', `arena${i}${j}`);
 
             container.appendChild(theArena);
 
@@ -52,7 +52,7 @@ function Arena(dimesionX, dimesionY) {
 
     let temp = container.querySelectorAll('canvas');
 
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < dimesionX * dimesionY; i++) {
         canvs.element[i] = temp[i];
         canvs.ctx[i] = canvs.element[i].getContext("2d");
         // drawArena(canvs.ctx[i], canvs.position.x[i], canvs.position.y[i]);
@@ -63,7 +63,7 @@ function Arena(dimesionX, dimesionY) {
 
 function drawArena(ctx, x, y) {
     ctx.beginPath();
-    ctx.fillStyle = "#00FF00";
+    ctx.fillStyle = "#181825";
     ctx.fillRect(x, y, 420, 420);
     ctx.stroke();
 }
@@ -71,15 +71,10 @@ function drawArena(ctx, x, y) {
 function Hero(theHero) {
 
     theHero.beginPath();
-    theHero.arc(170, 75, 73, 0, 10);
-    theHero.fillStyle = "#FF0000";
+    theHero.arc(170, 75, 50, 0, 10);
+    theHero.fillStyle = "#b4befe";
     theHero.fill();
     theHero.stroke();
 
 }
 
-/*function moveHero() {
-    console.log("Entro");
-    theHero.postion.x += 10
-    theHero.hero.style.left = theHero.postion.x + "px";
-}*/
