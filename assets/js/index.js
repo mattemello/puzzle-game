@@ -11,29 +11,19 @@ let canvs = {
     }
 }
 
-let theHero = {
-    hero: null,
-    ctxh: null,
-    postion: {
-        x: null,
-        y: null
-    }
-};
 
 async function init() {
     let result = await WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject)
     const wasm = result.instance;
     go.run(wasm);
-    console.log(wasm.exports);
 
     start();
-    createHero();
 }
 
 function start() {
     CreateTheArena();
 }
-function createHero() {
+function heroStart() {
     CreateTheHero();
 }
 
@@ -72,29 +62,24 @@ function Arena(dimesionX, dimesionY) {
 }
 
 function drawArena(ctx, x, y) {
-    console.log(x, y);
     ctx.beginPath();
     ctx.fillStyle = "#00FF00";
     ctx.fillRect(x, y, 420, 420);
     ctx.stroke();
 }
 
-function Hero() {
-    theHero.hero = document.getElementById("hero");
-    theHero.ctxh = theHero.hero.getContext("2d");
+function Hero(theHero) {
 
-    theHero.ctxh.beginPath();
-    theHero.ctxh.arc(170, 75, 73, 0, 10);
-    theHero.ctxh.fillStyle = "#FF0000";
-    theHero.ctxh.fill();
-    theHero.ctxh.stroke();
+    theHero.beginPath();
+    theHero.arc(170, 75, 73, 0, 10);
+    theHero.fillStyle = "#FF0000";
+    theHero.fill();
+    theHero.stroke();
 
-    theHero.hero.style.left = theHero.postion.x + "px"
-    theHero.hero.style.top = theHero.postion.y + "px"
 }
 
-function moveHero() {
+/*function moveHero() {
     console.log("Entro");
     theHero.postion.x += 10
     theHero.hero.style.left = theHero.postion.x + "px";
-}
+}*/
