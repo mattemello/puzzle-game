@@ -15,6 +15,8 @@ import (
  * bottom: ~(-8)
  */
 
+var Screen strctVar.Screen
+
 var Arena strctVar.TheArena
 
 var Hero strctVar.TheHero
@@ -23,8 +25,8 @@ var doc = js.Global().Get("document")
 
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
 
-	Arena.DimensionCol = 5
-	Arena.DimensionRaw = 5
+	Arena.DimensionCol = 10
+	Arena.DimensionRaw = 10
 	js.Global().Call("Arena", Arena.DimensionRaw, Arena.DimensionCol)
 
 	TakedimensionArena()
@@ -60,33 +62,58 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 	return nil
 }
 
-func MoveHero(this js.Value, args []js.Value) interface{} {
+func MoveHeroX(this js.Value, args []js.Value) interface{} {
 
-	if int(Hero.Hero.Call("getBoundingClientRect").Get("right").Float())-20 > Arena.Perim.Xright {
-
-		Hero.Position.Xleft = Arena.Perim.Xleft - 40
-		Hero.Position.Ytop += 54
-		Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.Xleft) + "px"))
-		Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Ytop) + "px"))
-
+	if int(Hero.Hero.Call("getBoundingClientRect").Get("right").Float())-20 > Arena.Perim.Xright && int(args[0].Float()) == 1 {
+		return nil
+	}
+	if int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())+30 < Arena.Perim.Xleft && int(args[0].Float()) == -1 {
 		return nil
 	}
 
-	Hero.Position.Xleft += 10
+	Hero.Position.Xleft += 10 * int(args[0].Float())
 
 	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.Xleft) + "px"))
 
 	return nil
 }
 
+func MoveHeroY(this js.Value, args []js.Value) interface{} {
+
+	if int(Hero.Hero.Call("getBoundingClientRect").Get("bottom").Float()) > Arena.Perim.Ybottom && int(args[0].Float()) == 1 {
+		return nil
+	}
+	if int(Hero.Hero.Call("getBoundingClientRect").Get("top").Float())-1 < Arena.Perim.Ytop && int(args[0].Float()) == -1 {
+		return nil
+	}
+
+	Hero.Position.Ytop += 10 * int(args[0].Float())
+
+	Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Ytop) + "px"))
+
+	return nil
+}
+
+func TakeDimensionScreen() {
+	wind := js.Global().Get("window")
+
+	Screen.Height = int(wind.Get("innerHeight").Float())
+	Screen.Width = int(wind.Get("innerWidth").Float())
+
+	fmt.Println(Screen.Width, "-", Screen.Height)
+}
+
 func main() {
+
+	TakeDimensionScreen()
 
 	Hero.Hero = doc.Call("getElementById", "hero")
 	Hero.Ctxh = Hero.Hero.Call("getContext", "2d")
 
 	js.Global().Set("CreateTheArena", js.FuncOf(CreateTheArena))
 	js.Global().Set("CreateTheHero", js.FuncOf(CreateTheHero))
-	js.Global().Set("MoveHero", js.FuncOf(MoveHero))
+	js.Global().Set("MoveHeroX", js.FuncOf(MoveHeroX))
+	js.Global().Set("MoveHeroY", js.FuncOf(MoveHeroY))
 
 	<-make(chan struct{})
 }

@@ -2,6 +2,25 @@ const go = new Go();
 //wasm.CreateTheArena();
 
 //TODO: use the map for mapping the key (hjkl)
+// done for the 'l', now do all the other key
+// try doing the run with 'L'
+
+
+document.addEventListener('keydown', function (event) {
+    if (event.key == "l") {
+        MoveHeroX(1);
+    }
+    if (event.key == "h") {
+        MoveHeroX(-1);
+    }
+    if (event.key == "k") {
+        MoveHeroY(-1);
+    }
+    if (event.key == "j") {
+        MoveHeroY(1);
+    }
+
+});
 
 let canvs = {
     element: [],
@@ -19,6 +38,7 @@ async function init() {
     go.run(wasm);
 
     start();
+    heroStart();
 }
 
 function start() {

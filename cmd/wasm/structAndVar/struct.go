@@ -9,6 +9,11 @@ type Coordination struct {
 	Ybottom int
 }
 
+type Screen struct {
+	Width  int
+	Height int
+}
+
 type TheArena struct {
 	DimensionCol int
 	DimensionRaw int
