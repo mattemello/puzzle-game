@@ -3,12 +3,16 @@ package structandvar
 import "syscall/js"
 
 type Coordination struct {
-	X int
-	Y int
+	Xleft   int
+	Xright  int
+	Ytop    int
+	Ybottom int
 }
 
 type TheArena struct {
-	Dimension Coordination
+	DimensionCol int
+	DimensionRaw int
+	Perim        Coordination
 }
 
 type TheHero struct {

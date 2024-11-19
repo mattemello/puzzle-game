@@ -23,34 +23,38 @@ var doc = js.Global().Get("document")
 
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
 
-	Arena.Dimension.X = 5
-	Arena.Dimension.Y = 5
-	js.Global().Call("Arena", Arena.Dimension.X, Arena.Dimension.Y)
+	Arena.DimensionCol = 5
+	Arena.DimensionRaw = 5
+	js.Global().Call("Arena", Arena.DimensionRaw, Arena.DimensionCol)
+
+	TakedimensionArena()
 
 	return nil
 }
 
+func TakedimensionArena() {
+
+	perimeterAre := doc.Call("getElementById", "arena00")
+	Arena.Perim.Xleft = int(perimeterAre.Call("getBoundingClientRect").Get("left").Float())
+	Arena.Perim.Ytop = int(perimeterAre.Call("getBoundingClientRect").Get("top").Float())
+
+	perimeterAre = doc.Call("getElementById", "arena0"+strconv.Itoa(Arena.DimensionCol-1))
+	Arena.Perim.Xright = int(perimeterAre.Call("getBoundingClientRect").Get("right").Float())
+
+	perimeterAre = doc.Call("getElementById", "arena"+strconv.Itoa(Arena.DimensionRaw-1)+strconv.Itoa(Arena.DimensionRaw-1))
+	Arena.Perim.Ybottom = int(perimeterAre.Call("getBoundingClientRect").Get("bottom").Float())
+
+}
+
 func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
-	startArena := doc.Call("getElementById", "arena00")
-
-	x := startArena.Call("getBoundingClientRect").Get("left").Float()
-	y := startArena.Call("getBoundingClientRect").Get("top").Float()
-
-	fmt.Println(startArena)
-
-	fmt.Println(startArena.Call("getBoundingClientRect").Get("left").Float())
-	fmt.Println(startArena.Call("getBoundingClientRect").Get("top").Float())
-	fmt.Println(startArena.Call("getBoundingClientRect").Get("right").Float())
-	fmt.Println(startArena.Call("getBoundingClientRect").Get("bottom").Float())
-
-	Hero.Position.X = int(x) - 40
-	Hero.Position.Y = int(y)
+	Hero.Position.Xleft = Arena.Perim.Xleft - 40
+	Hero.Position.Ytop = Arena.Perim.Ytop
 
 	Hero.Style = Hero.Hero.Get("style")
 
-	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.X) + "px"))
-	Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Y) + "px"))
+	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.Xleft) + "px"))
+	Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Ytop) + "px"))
 	js.Global().Call("Hero", Hero.Ctxh)
 
 	return nil
@@ -58,9 +62,19 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
 func MoveHero(this js.Value, args []js.Value) interface{} {
 
-	Hero.Position.X += 10
+	if int(Hero.Hero.Call("getBoundingClientRect").Get("right").Float())-20 > Arena.Perim.Xright {
 
-	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.X) + "px"))
+		Hero.Position.Xleft = Arena.Perim.Xleft - 40
+		Hero.Position.Ytop += 54
+		Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.Xleft) + "px"))
+		Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Ytop) + "px"))
+
+		return nil
+	}
+
+	Hero.Position.Xleft += 10
+
+	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.Xleft) + "px"))
 
 	return nil
 }
