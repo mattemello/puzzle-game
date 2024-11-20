@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 	"syscall/js"
@@ -23,6 +22,7 @@ var Path []strctVar.Path
 
 var doc = js.Global().Get("document")
 
+// TODO: do not go over the existence one
 func chooseThePath(block strctVar.Path) strctVar.Path {
 
 	possibleDirection := make(map[int]string)
@@ -49,16 +49,9 @@ func chooseThePath(block strctVar.Path) strctVar.Path {
 	var decision string
 	thereis := false
 
-	fmt.Println(block.Numer1, block.Numer2)
-
-	for key, value := range possibleDirection {
-		fmt.Println("Key:", key, "Value:", value)
-	}
-
 	for !thereis {
 		whatPos = rand.Intn(len(possibleDirection))
 		decision, thereis = possibleDirection[whatPos]
-		fmt.Println(thereis, whatPos)
 	}
 
 	var newBlock strctVar.Path
@@ -66,21 +59,21 @@ func chooseThePath(block strctVar.Path) strctVar.Path {
 	switch decision {
 
 	case "up":
-		newBlock.Numer1 = block.Numer1 + 1
+		newBlock.Numer1 = block.Numer1 - 1
 		newBlock.Numer2 = block.Numer2
 		break
 	case "down":
-		newBlock.Numer1 = block.Numer1 - 1
+		newBlock.Numer1 = block.Numer1 + 1
 		newBlock.Numer2 = block.Numer2
 
 		break
 	case "left":
-		newBlock.Numer2 = block.Numer2 + 1
+		newBlock.Numer2 = block.Numer2 - 1
 		newBlock.Numer1 = block.Numer1
 
 		break
 	case "right":
-		newBlock.Numer2 = block.Numer2 - 1
+		newBlock.Numer2 = block.Numer2 + 1
 		newBlock.Numer1 = block.Numer1
 
 		break
@@ -91,12 +84,12 @@ func chooseThePath(block strctVar.Path) strctVar.Path {
 
 	newBlock.Arena = doc.Call("getElementById", "arena"+strconv.Itoa(newBlock.Numer1)+strconv.Itoa(newBlock.Numer2))
 
-	fmt.Println(newBlock.Numer1, block.Numer2, block.Arena)
-
 	newBlock.Coordination.Xleft = int(newBlock.Arena.Call("getBoundingClientRect").Get("left").Float())
 	newBlock.Coordination.Ytop = int(newBlock.Arena.Call("getBoundingClientRect").Get("top").Float())
 
-	newBlock.Arena.Get("style").Call("setProperty", "color", "#FF0000")
+	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
+
+	js.Global().Call("colorPath", newBlock.Ctx)
 
 	return newBlock
 
@@ -122,7 +115,8 @@ func CreateThePath() {
 	Path[0].Coordination.Xleft = int(Path[0].Arena.Call("getBoundingClientRect").Get("left").Float())
 	Path[0].Coordination.Ytop = int(Path[0].Arena.Call("getBoundingClientRect").Get("top").Float())
 
-	Path[0].Arena.Get("style").Call("setProperty", "color", "#FF0000")
+	Path[0].Ctx = Path[0].Arena.Call("getContext", "2d")
+	js.Global().Call("colorPath", Path[0].Ctx)
 
 	for i := 1; i < dimensionPath; i++ {
 		Path[i] = chooseThePath(Path[i-1])
@@ -209,7 +203,6 @@ func TakeDimensionScreen() {
 	Screen.Height = int(wind.Get("innerHeight").Float())
 	Screen.Width = int(wind.Get("innerWidth").Float())
 
-	fmt.Println(Screen.Width, "-", Screen.Height)
 }
 
 func main() {

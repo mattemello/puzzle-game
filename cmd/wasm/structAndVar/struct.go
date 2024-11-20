@@ -11,6 +11,7 @@ type Coordination struct {
 
 type Path struct {
 	Arena        js.Value
+	Ctx          js.Value
 	Numer1       int
 	Numer2       int
 	Coordination Coordination

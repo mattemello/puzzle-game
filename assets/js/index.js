@@ -82,6 +82,13 @@ function Arena(dimesionX, dimesionY) {
 
 }
 
+function colorPath(ctx) {
+    console.log("entro nel colorPath", ctx)
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(0, 0, 420, 420);
+    ctx.stroke();
+}
+
 function drawArena(ctx, x, y) {
     ctx.beginPath();
     ctx.fillStyle = "#181825";
