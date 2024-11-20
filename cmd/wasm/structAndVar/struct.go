@@ -9,6 +9,13 @@ type Coordination struct {
 	Ybottom int
 }
 
+type Path struct {
+	Arena        js.Value
+	Numer1       int
+	Numer2       int
+	Coordination Coordination
+}
+
 type Screen struct {
 	Width  int
 	Height int

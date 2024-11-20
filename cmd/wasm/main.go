@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"strconv"
 	"syscall/js"
 
@@ -16,12 +17,32 @@ import (
  */
 
 var Screen strctVar.Screen
-
 var Arena strctVar.TheArena
-
 var Hero strctVar.TheHero
+var Path []strctVar.Path
 
 var doc = js.Global().Get("document")
+
+func CreateThePath() {
+	// NOTE: the dimension of the path
+
+	var dimensionPath int
+
+	for ok := true; ok; ok = (dimensionPath < 1) {
+		dimensionPath = rand.Intn(Arena.DimensionRaw * Arena.DimensionCol)
+	}
+
+	Path = make([]strctVar.Path, dimensionPath)
+
+	// NOTE: the start of the path
+	Path[0].Numer1 = rand.Intn(Arena.DimensionCol)
+	Path[0].Numer2 = rand.Intn(Arena.DimensionRaw)
+
+	Path[0].Arena = doc.Call("getElementById", "arena"+strconv.Itoa(Path[0].Numer1)+strconv.Itoa(Path[0].Numer2))
+
+	Path[0].Coordination.Xleft = int(Path[0].Arena.Call("getBoundingClientRect").Get("left").Float())
+	Path[0].Coordination.Ytop = int(Path[0].Arena.Call("getBoundingClientRect").Get("top").Float())
+}
 
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
 
@@ -30,6 +51,7 @@ func CreateTheArena(this js.Value, args []js.Value) interface{} {
 	js.Global().Call("Arena", Arena.DimensionRaw, Arena.DimensionCol)
 
 	TakedimensionArena()
+	CreateThePath()
 
 	return nil
 }
@@ -50,8 +72,8 @@ func TakedimensionArena() {
 
 func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
-	Hero.Position.Xleft = Arena.Perim.Xleft - 40
-	Hero.Position.Ytop = Arena.Perim.Ytop
+	Hero.Position.Xleft = Path[0].Coordination.Xleft - 40
+	Hero.Position.Ytop = Path[0].Coordination.Ytop
 
 	Hero.Style = Hero.Hero.Get("style")
 
