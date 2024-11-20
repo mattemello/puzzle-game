@@ -23,6 +23,85 @@ var Path []strctVar.Path
 
 var doc = js.Global().Get("document")
 
+func chooseThePath(block strctVar.Path) strctVar.Path {
+
+	possibleDirection := make(map[int]string)
+
+	possibleDirection[0] = "up"
+	possibleDirection[1] = "down"
+	possibleDirection[2] = "left"
+	possibleDirection[3] = "right"
+
+	// number2 -> left/right number1 -> up/down
+	if block.Numer1 == 0 {
+		delete(possibleDirection, 0)
+	} else if block.Numer1 == Arena.DimensionCol-1 {
+		delete(possibleDirection, 1)
+	}
+
+	if block.Numer2 == 0 {
+		delete(possibleDirection, 2)
+	} else if block.Numer2 == Arena.DimensionRaw-1 {
+		delete(possibleDirection, 3)
+	}
+
+	var whatPos int
+	var decision string
+	thereis := false
+
+	fmt.Println(block.Numer1, block.Numer2)
+
+	for key, value := range possibleDirection {
+		fmt.Println("Key:", key, "Value:", value)
+	}
+
+	for !thereis {
+		whatPos = rand.Intn(len(possibleDirection))
+		decision, thereis = possibleDirection[whatPos]
+		fmt.Println(thereis, whatPos)
+	}
+
+	var newBlock strctVar.Path
+
+	switch decision {
+
+	case "up":
+		newBlock.Numer1 = block.Numer1 + 1
+		newBlock.Numer2 = block.Numer2
+		break
+	case "down":
+		newBlock.Numer1 = block.Numer1 - 1
+		newBlock.Numer2 = block.Numer2
+
+		break
+	case "left":
+		newBlock.Numer2 = block.Numer2 + 1
+		newBlock.Numer1 = block.Numer1
+
+		break
+	case "right":
+		newBlock.Numer2 = block.Numer2 - 1
+		newBlock.Numer1 = block.Numer1
+
+		break
+
+	default:
+		//TODO: throw a error
+	}
+
+	newBlock.Arena = doc.Call("getElementById", "arena"+strconv.Itoa(newBlock.Numer1)+strconv.Itoa(newBlock.Numer2))
+
+	fmt.Println(newBlock.Numer1, block.Numer2, block.Arena)
+
+	newBlock.Coordination.Xleft = int(newBlock.Arena.Call("getBoundingClientRect").Get("left").Float())
+	newBlock.Coordination.Ytop = int(newBlock.Arena.Call("getBoundingClientRect").Get("top").Float())
+
+	newBlock.Arena.Get("style").Call("setProperty", "color", "#FF0000")
+
+	return newBlock
+
+}
+
 func CreateThePath() {
 	// NOTE: the dimension of the path
 
@@ -42,6 +121,14 @@ func CreateThePath() {
 
 	Path[0].Coordination.Xleft = int(Path[0].Arena.Call("getBoundingClientRect").Get("left").Float())
 	Path[0].Coordination.Ytop = int(Path[0].Arena.Call("getBoundingClientRect").Get("top").Float())
+
+	Path[0].Arena.Get("style").Call("setProperty", "color", "#FF0000")
+
+	for i := 1; i < dimensionPath; i++ {
+		Path[i] = chooseThePath(Path[i-1])
+
+	}
+
 }
 
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
