@@ -17,6 +17,11 @@ type Path struct {
 	Coordination Coordination
 }
 
+type ControllPath struct {
+	Path      map[string]Path
+	ArrayPath []string
+}
+
 type Screen struct {
 	Width  int
 	Height int

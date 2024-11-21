@@ -24,7 +24,7 @@ import (
 var Screen strctVar.Screen
 var Arena strctVar.TheArena
 var Hero strctVar.TheHero
-var Path []strctVar.Path
+var Path strctVar.ControllPath
 
 var doc = js.Global().Get("document")
 
@@ -95,10 +95,7 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
 
-	//js.Global().Call("colorPath", newBlock.Ctx, "#FF0000")
-
 	return newBlock
-
 }
 
 func CreateThePath() {
@@ -109,21 +106,29 @@ func CreateThePath() {
 		dimensionPath = rand.Intn(Arena.DimensionRaw * Arena.DimensionCol)
 	}
 
-	Path = make([]strctVar.Path, dimensionPath)
+	Path.ArrayPath = make([]string, dimensionPath)
+	Path.Path = make(map[string]strctVar.Path)
 
-	Path[0].Numer1 = rand.Intn(Arena.DimensionCol)
-	Path[0].Numer2 = rand.Intn(Arena.DimensionRaw)
+	num1 := rand.Intn(Arena.DimensionCol)
+	num2 := rand.Intn(Arena.DimensionRaw)
 
-	Path[0].Arena = doc.Call("getElementById", "arena"+strconv.Itoa(Path[0].Numer1)+strconv.Itoa(Path[0].Numer2))
+	aren := doc.Call("getElementById", "arena"+strconv.Itoa(num1)+strconv.Itoa(num2))
 
-	Path[0].Coordination.Xleft = int(Path[0].Arena.Call("getBoundingClientRect").Get("left").Float())
-	Path[0].Coordination.Ytop = int(Path[0].Arena.Call("getBoundingClientRect").Get("top").Float())
+	var coo strctVar.Coordination
+	coo.Xleft = int(aren.Call("getBoundingClientRect").Get("left").Float())
+	coo.Ytop = int(aren.Call("getBoundingClientRect").Get("top").Float())
 
-	Path[0].Ctx = Path[0].Arena.Call("getContext", "2d")
-	js.Global().Call("colorPath", Path[0].Ctx, "#313244")
+	ctx := aren.Call("getContext", "2d")
+	js.Global().Call("colorPath", ctx, "#313244")
+
+	Path.ArrayPath[0] = strconv.Itoa(num1) + strconv.Itoa(num2)
+	//Path.Path[Path.ArrayPath[0]] = make(strctVar.Path)
+	Path.Path[Path.ArrayPath[0]] = strctVar.Path{Numer1: num1, Numer2: num2, Arena: aren, Ctx: ctx, Coordination: coo}
 
 	for i := 1; i < dimensionPath; i++ {
-		Path[i] = chooseThePath(Path[i-1], i)
+		block := chooseThePath(Path.Path[Path.ArrayPath[i]], i)
+		Path.ArrayPath[i] = strconv.Itoa(block.Numer1) + strconv.Itoa(block.Numer2)
+		Path.Path[Path.ArrayPath[i]] = block
 	}
 
 }
@@ -156,8 +161,8 @@ func TakedimensionArena() {
 
 func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
-	Hero.Position.Xleft = Path[0].Coordination.Xleft - 40
-	Hero.Position.Ytop = Path[0].Coordination.Ytop
+	Hero.Position.Xleft = Path.Path[Path.ArrayPath[0]].Coordination.Xleft - 40
+	Hero.Position.Ytop = Path.Path[Path.ArrayPath[0]].Coordination.Ytop
 
 	Hero.Style = Hero.Hero.Get("style")
 
