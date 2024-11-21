@@ -17,14 +17,17 @@ type Path struct {
 	Coordination Coordination
 }
 
+/* type MarginPath struct {
+} */
+
 type ControllPath struct {
 	Path      map[string]Path
 	ArrayPath []string
 }
 
 type Screen struct {
-	Width  int
-	Height int
+	Num1 int
+	Num2 int
 }
 
 type TheArena struct {
@@ -34,9 +37,10 @@ type TheArena struct {
 }
 
 type TheHero struct {
-	Hero     js.Value
-	Ctxh     js.Value
-	Style    js.Value
-	Position Coordination
+	Hero          js.Value
+	Ctxh          js.Value
+	Style         js.Value
+	Position      Coordination
+	PathCurrentIn Screen
 	//Dimension Coordination
 }

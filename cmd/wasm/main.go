@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"strconv"
 	"syscall/js"
@@ -61,6 +62,8 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 
 	var newBlock strctVar.Path
 
+	fmt.Println(possibleDirection)
+
 	switch decision {
 
 	case "up":
@@ -94,6 +97,7 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 	newBlock.Coordination.Ytop = int(newBlock.Arena.Call("getBoundingClientRect").Get("top").Float())
 
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
+	js.Global().Call("colorPath", newBlock.Ctx, "#313244")
 
 	return newBlock
 }
@@ -131,6 +135,10 @@ func CreateThePath() {
 		Path.Path[Path.ArrayPath[i]] = block
 	}
 
+	for key, ele := range Path.Path {
+		fmt.Println("value key "+key+" - ", ele)
+	}
+
 }
 
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
@@ -164,6 +172,9 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 	Hero.Position.Xleft = Path.Path[Path.ArrayPath[0]].Coordination.Xleft - 40
 	Hero.Position.Ytop = Path.Path[Path.ArrayPath[0]].Coordination.Ytop
 
+	Hero.PathCurrentIn.Num1 = Path.Path[Path.ArrayPath[0]].Numer1
+	Hero.PathCurrentIn.Num2 = Path.Path[Path.ArrayPath[0]].Numer2
+
 	Hero.Style = Hero.Hero.Get("style")
 
 	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.Xleft) + "px"))
@@ -175,11 +186,23 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
 func MoveHeroX(this js.Value, args []js.Value) interface{} {
 
-	if int(Hero.Hero.Call("getBoundingClientRect").Get("right").Float())-20 > Arena.Perim.Xright && int(args[0].Float()) == 1 {
-		return nil
+	if int(args[0].Float()) == 1 {
+		if int(Hero.Hero.Call("getBoundingClientRect").Get("right").Float()) > Arena.Perim.Ybottom {
+			return nil
+		}
+
+		if _, ok := Path.Path[strconv.Itoa(Hero.PathCurrentIn.Num1)+strconv.Itoa(Hero.PathCurrentIn.Num2+1)]; !ok {
+			return nil
+		}
 	}
-	if int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())+30 < Arena.Perim.Xleft && int(args[0].Float()) == -1 {
-		return nil
+	if int(args[0].Float()) == -1 {
+		if int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float()) > Arena.Perim.Ybottom {
+			return nil
+		}
+
+		if _, ok := Path.Path[strconv.Itoa(Hero.PathCurrentIn.Num1)+strconv.Itoa(Hero.PathCurrentIn.Num2-1)]; !ok {
+			return nil
+		}
 	}
 
 	Hero.Position.Xleft += 10 * int(args[0].Float())
@@ -191,11 +214,23 @@ func MoveHeroX(this js.Value, args []js.Value) interface{} {
 
 func MoveHeroY(this js.Value, args []js.Value) interface{} {
 
-	if int(Hero.Hero.Call("getBoundingClientRect").Get("bottom").Float()) > Arena.Perim.Ybottom && int(args[0].Float()) == 1 {
-		return nil
+	if int(args[0].Float()) == 1 {
+		if int(Hero.Hero.Call("getBoundingClientRect").Get("bottom").Float()) > Arena.Perim.Ybottom {
+			return nil
+		}
+
+		if _, ok := Path.Path[strconv.Itoa(Hero.PathCurrentIn.Num1+1)+strconv.Itoa(Hero.PathCurrentIn.Num2)]; !ok {
+			return nil
+		}
 	}
-	if int(Hero.Hero.Call("getBoundingClientRect").Get("top").Float())-1 < Arena.Perim.Ytop && int(args[0].Float()) == -1 {
-		return nil
+	if int(args[0].Float()) == -1 {
+		if int(Hero.Hero.Call("getBoundingClientRect").Get("top").Float()) > Arena.Perim.Ybottom {
+			return nil
+		}
+
+		if _, ok := Path.Path[strconv.Itoa(Hero.PathCurrentIn.Num1-1)+strconv.Itoa(Hero.PathCurrentIn.Num2)]; !ok {
+			return nil
+		}
 	}
 
 	Hero.Position.Ytop += 10 * int(args[0].Float())
@@ -208,8 +243,8 @@ func MoveHeroY(this js.Value, args []js.Value) interface{} {
 func TakeDimensionScreen() {
 	wind := js.Global().Get("window")
 
-	Screen.Height = int(wind.Get("innerHeight").Float())
-	Screen.Width = int(wind.Get("innerWidth").Float())
+	Screen.Num1 = int(wind.Get("innerHeight").Float())
+	Screen.Num2 = int(wind.Get("innerWidth").Float())
 
 }
 

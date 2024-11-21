@@ -70,7 +70,7 @@ function Arena(dimesionX, dimesionY) {
 
         for (let j = 0; j < dimesionY; ++j) {
             let theArena = document.createElement('canvas');
-            theArena.innerHTML = "Sorry no cavs for you";
+            theArena.innerHTML = "/";
             theArena.setAttribute('id', `arena${i}${j}`);
 
             container.appendChild(theArena);
