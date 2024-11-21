@@ -15,6 +15,12 @@ import (
  * bottom: ~(-8)
  */
 
+/**
+ * TODO: make the path black, so that it will create when you walk it
+ * maybe its possible to take the element near the hero, save them and say if they are walkable or not
+ * so i can color the element walkable
+ */
+
 var Screen strctVar.Screen
 var Arena strctVar.TheArena
 var Hero strctVar.TheHero
@@ -22,8 +28,7 @@ var Path []strctVar.Path
 
 var doc = js.Global().Get("document")
 
-// TODO: do not go over the existence one
-func chooseThePath(block strctVar.Path) strctVar.Path {
+func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 
 	possibleDirection := make(map[int]string)
 
@@ -32,7 +37,7 @@ func chooseThePath(block strctVar.Path) strctVar.Path {
 	possibleDirection[2] = "left"
 	possibleDirection[3] = "right"
 
-	// number2 -> left/right number1 -> up/down
+	// NOTE: number2 -> left/right number1 -> up/down
 	if block.Numer1 == 0 {
 		delete(possibleDirection, 0)
 	} else if block.Numer1 == Arena.DimensionCol-1 {
@@ -79,7 +84,8 @@ func chooseThePath(block strctVar.Path) strctVar.Path {
 		break
 
 	default:
-		//TODO: throw a error
+		js.Global().Call("alert", "Error - Error in the creation of the path, value not good")
+		js.Global().Get("console").Call("error", "Error - Error in the creation of the path, value not good")
 	}
 
 	newBlock.Arena = doc.Call("getElementById", "arena"+strconv.Itoa(newBlock.Numer1)+strconv.Itoa(newBlock.Numer2))
@@ -89,24 +95,22 @@ func chooseThePath(block strctVar.Path) strctVar.Path {
 
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
 
-	js.Global().Call("colorPath", newBlock.Ctx)
+	//js.Global().Call("colorPath", newBlock.Ctx, "#FF0000")
 
 	return newBlock
 
 }
 
 func CreateThePath() {
-	// NOTE: the dimension of the path
 
-	var dimensionPath int
+	dimensionPath := 0
 
-	for ok := true; ok; ok = (dimensionPath < 1) {
+	for !(dimensionPath > 10 && dimensionPath < (Arena.DimensionCol*Arena.DimensionRaw)/2) {
 		dimensionPath = rand.Intn(Arena.DimensionRaw * Arena.DimensionCol)
 	}
 
 	Path = make([]strctVar.Path, dimensionPath)
 
-	// NOTE: the start of the path
 	Path[0].Numer1 = rand.Intn(Arena.DimensionCol)
 	Path[0].Numer2 = rand.Intn(Arena.DimensionRaw)
 
@@ -116,11 +120,10 @@ func CreateThePath() {
 	Path[0].Coordination.Ytop = int(Path[0].Arena.Call("getBoundingClientRect").Get("top").Float())
 
 	Path[0].Ctx = Path[0].Arena.Call("getContext", "2d")
-	js.Global().Call("colorPath", Path[0].Ctx)
+	js.Global().Call("colorPath", Path[0].Ctx, "#313244")
 
 	for i := 1; i < dimensionPath; i++ {
-		Path[i] = chooseThePath(Path[i-1])
-
+		Path[i] = chooseThePath(Path[i-1], i)
 	}
 
 }

@@ -1,9 +1,7 @@
 const go = new Go();
 //wasm.CreateTheArena();
 
-//TODO: use the map for mapping the key (hjkl)
-// done for the 'l', now do all the other key
-// try doing the run with 'L'
+//TODO: use the map for mapping the key (←↓↑→) or (wasd)
 
 
 document.addEventListener('keydown', function (event) {
@@ -17,6 +15,22 @@ document.addEventListener('keydown', function (event) {
         MoveHeroY(-1);
     }
     if (event.key == "j") {
+        MoveHeroY(1);
+    }
+    if (event.key == "L") {
+        MoveHeroX(1);
+        MoveHeroX(1);
+    }
+    if (event.key == "H") {
+        MoveHeroX(-1);
+        MoveHeroX(-1);
+    }
+    if (event.key == "K") {
+        MoveHeroY(-1);
+        MoveHeroY(-1);
+    }
+    if (event.key == "J") {
+        MoveHeroY(1);
         MoveHeroY(1);
     }
 
@@ -82,9 +96,8 @@ function Arena(dimesionX, dimesionY) {
 
 }
 
-function colorPath(ctx) {
-    console.log("entro nel colorPath", ctx)
-    ctx.fillStyle = "#FF0000";
+function colorPath(ctx, color) {
+    ctx.fillStyle = color;
     ctx.fillRect(0, 0, 420, 420);
     ctx.stroke();
 }
