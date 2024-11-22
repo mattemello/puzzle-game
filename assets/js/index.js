@@ -4,7 +4,7 @@ const go = new Go();
 //TODO: use the map for mapping the key (←↓↑→) or (wasd)
 
 
-document.addEventListener('keydown', function (event) {
+document.addEventListener('keydown', function(event) {
     if (event.key == "l") {
         MoveHeroX(1);
     }
@@ -62,6 +62,10 @@ function heroStart() {
     CreateTheHero();
 }
 
+/*
+ * @param {int} dimensionX
+ * @param {int} dimensionY
+*/
 function Arena(dimesionX, dimesionY) {
     let container = document.getElementById("container");
     let dimension = 0;
@@ -109,6 +113,9 @@ function drawArena(ctx, x, y) {
     ctx.stroke();
 }
 
+/*
+ * @param {
+ */
 function Hero(theHero) {
     theHero.beginPath();
     theHero.arc(170, 75, 50, 0, 10);

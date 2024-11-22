@@ -3,19 +3,25 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
 
+	godotenv.Load()
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("./assets/")))
 
+	log.Println(os.LookupEnv("PORT"))
+
 	srv := &http.Server{
-		Addr:    ":3010",
+		Addr:    os.Getenv("PORT"),
 		Handler: mux,
 	}
 
-	log.Printf("Serving on port 3010\n")
+	log.Printf("Serving\n")
 
 	log.Fatal(srv.ListenAndServe())
 

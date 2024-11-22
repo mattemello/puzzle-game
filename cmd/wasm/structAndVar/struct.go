@@ -12,16 +12,17 @@ type Coordination struct {
 type Path struct {
 	Arena        js.Value
 	Ctx          js.Value
-	Numer1       int
-	Numer2       int
+	Number1      int
+	Number2      int
 	Coordination Coordination
+	Wall         Coordination
 }
 
 /* type MarginPath struct {
 } */
 
 type ControllPath struct {
-	Path      map[string]Path
+	Path      map[string]*Path
 	ArrayPath []string
 }
 
