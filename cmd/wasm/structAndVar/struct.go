@@ -9,13 +9,20 @@ type Coordination struct {
 	Ybottom int
 }
 
+type Wall struct {
+	Xleft   bool
+	Xright  bool
+	Ytop    bool
+	Ybottom bool
+}
+
 type Path struct {
 	Arena        js.Value
 	Ctx          js.Value
 	Number1      int
 	Number2      int
 	Coordination Coordination
-	Wall         Coordination
+	Wall         Wall
 }
 
 /* type MarginPath struct {

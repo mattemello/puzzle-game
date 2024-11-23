@@ -1,6 +1,8 @@
 package main
 
 import (
+	//"fmt"
+	"fmt"
 	"strconv"
 	"syscall/js"
 
@@ -52,14 +54,32 @@ func MoveHeroX(this js.Value, args []js.Value) interface{} {
 			return nil
 		}
 
-		move.Xright += 1
+		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("right").Float())-20 > pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Xright
+		if heroSurpassTheBlock {
+			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Xright {
+				return nil
+			}
+
+			Hero.PathCurrentIn.Num2 = Hero.PathCurrentIn.Num2 + 1
+		}
+
 	}
 	if int(args[0].Float()) == -1 {
 		if int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())+30 < pathArena.Arena.Perim.Xleft {
 			return nil
 		}
 
-		move.Xleft += 1
+		fmt.Println(pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2))
+		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())-30 < pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Xleft
+		if heroSurpassTheBlock {
+			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Xleft {
+				//fmt.Println(int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())-30, pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Xleft)
+				return nil
+			}
+
+			Hero.PathCurrentIn.Num2 = Hero.PathCurrentIn.Num2 - 1
+		}
+
 	}
 
 	Hero.Position.Xleft += 10 * int(args[0].Float())
@@ -76,14 +96,29 @@ func MoveHeroY(this js.Value, args []js.Value) interface{} {
 			return nil
 		}
 
-		move.Ybottom += 1
+		//fmt.Println(pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Ybottom)
+		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("bottom").Float()) > pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Ybottom
+		if heroSurpassTheBlock {
+			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Ybottom {
+				return nil
+			}
+
+			Hero.PathCurrentIn.Num1 = Hero.PathCurrentIn.Num1 + 1
+		}
 	}
 	if int(args[0].Float()) == -1 {
 		if int(Hero.Hero.Call("getBoundingClientRect").Get("top").Float()) < pathArena.Arena.Perim.Ytop {
 			return nil
 		}
 
-		move.Ytop += 1
+		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("top").Float()) < pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Ytop
+		if heroSurpassTheBlock {
+			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Ytop {
+				return nil
+			}
+
+			Hero.PathCurrentIn.Num1 = Hero.PathCurrentIn.Num1 - 1
+		}
 	}
 
 	Hero.Position.Ytop += 10 * int(args[0].Float())

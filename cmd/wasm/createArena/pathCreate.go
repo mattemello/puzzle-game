@@ -12,7 +12,7 @@ import (
 
 var Path strctVar.ControllPath
 
-func calculateKey(num1, num2 int) string {
+func CalculateKey(num1, num2 int) string {
 	return strconv.Itoa(num1) + strconv.Itoa(num2)
 }
 
@@ -79,12 +79,14 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 	newBlock.Arena = doc.Call("getElementById", "arena"+strconv.Itoa(newBlock.Number1)+strconv.Itoa(newBlock.Number2))
 
 	newBlock.Coordination.Xleft = int(newBlock.Arena.Call("getBoundingClientRect").Get("left").Float())
+	newBlock.Coordination.Xright = int(newBlock.Arena.Call("getBoundingClientRect").Get("right").Float())
+	newBlock.Coordination.Ybottom = int(newBlock.Arena.Call("getBoundingClientRect").Get("bottom").Float())
 	newBlock.Coordination.Ytop = int(newBlock.Arena.Call("getBoundingClientRect").Get("top").Float())
 
-	newBlock.Wall.Xleft = int(newBlock.Arena.Call("getBoundingClientRect").Get("left").Float())
-	newBlock.Wall.Ytop = int(newBlock.Arena.Call("getBoundingClientRect").Get("top").Float())
-	newBlock.Wall.Xright = int(newBlock.Arena.Call("getBoundingClientRect").Get("right").Float())
-	newBlock.Wall.Ybottom = int(newBlock.Arena.Call("getBoundingClientRect").Get("bottom").Float())
+	newBlock.Wall.Xleft = true
+	newBlock.Wall.Ytop = true
+	newBlock.Wall.Xright = true
+	newBlock.Wall.Ybottom = true
 
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
 	js.Global().Call("colorPath", newBlock.Ctx, "#313244")
@@ -115,13 +117,15 @@ func CreateThePath() {
 	ctx := aren.Call("getContext", "2d")
 	js.Global().Call("colorPath", ctx, "#313244")
 
-	Path.ArrayPath[0] = calculateKey(num1, num2)
+	Path.ArrayPath[0] = CalculateKey(num1, num2)
 
 	Path.Path[Path.ArrayPath[0]] = &strctVar.Path{Number1: num1, Number2: num2, Arena: aren, Ctx: ctx, Coordination: coo}
 
+	fmt.Println("in the for")
+
 	for i := 1; i < dimensionPath; i++ {
 		block := chooseThePath(*Path.Path[Path.ArrayPath[i-1]], i)
-		Path.ArrayPath[i] = calculateKey(block.Number1, block.Number2)
+		Path.ArrayPath[i] = CalculateKey(block.Number1, block.Number2)
 		Path.Path[Path.ArrayPath[i]] = &block
 	}
 
@@ -129,24 +133,28 @@ func CreateThePath() {
 	for key, ele := range Path.Path {
 		wall = 0
 
-		if _, exist := Path.Path[calculateKey(ele.Number1+1, ele.Number2)]; exist {
-			Path.Path[key].Wall.Xright = -1
+		if n, exist := Path.Path[CalculateKey(ele.Number1, ele.Number2+1)]; exist {
+			fmt.Println(exist, key, n, " enter in the path right")
+			Path.Path[key].Wall.Xright = false
 			wall++
 		}
-		if _, exist := Path.Path[calculateKey(ele.Number1-1, ele.Number2)]; exist {
-			Path.Path[key].Wall.Xleft = -1
+		if n, exist := Path.Path[CalculateKey(ele.Number1, ele.Number2-1)]; exist {
+			fmt.Println(exist, key, n, "enter in the path left")
+			Path.Path[key].Wall.Xleft = false
 			wall++
 		}
-		if _, exist := Path.Path[calculateKey(ele.Number1, ele.Number2+1)]; exist {
-			Path.Path[key].Wall.Ybottom = -1
+		if n, exist := Path.Path[CalculateKey(ele.Number1+1, ele.Number2)]; exist {
+			fmt.Println(exist, key, n, "enter in the path bottom")
+			Path.Path[key].Wall.Ybottom = false
 			wall++
 		}
-		if _, exist := Path.Path[calculateKey(ele.Number1, ele.Number2-1)]; exist {
-			Path.Path[key].Wall.Ytop = -1
+		if n, exist := Path.Path[CalculateKey(ele.Number1-1, ele.Number2)]; exist {
+			fmt.Println(exist, key, n, "enter in the path top")
+			Path.Path[key].Wall.Ytop = false
 			wall++
 		}
 
-		fmt.Println(key)
+		//fmt.Println(key, ele)
 		error.AssertError(wall == 0, "error in the creation of the path")
 
 	}
