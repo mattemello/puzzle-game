@@ -1,8 +1,6 @@
 package main
 
 import (
-	//"fmt"
-	"fmt"
 	"strconv"
 	"syscall/js"
 
@@ -15,9 +13,8 @@ import (
  * left: ~(-30)
  * top: ~(-8)
  * bottom: ~(-8)
- * it takes 4 step to pass a block, so if we want to change block we need to do like at 2, with in memory the prec one, and controll the border evrytime
- * i have to implement a perimeter of the path in the hero maybe
- */
+	MOVE maybe done
+*/
 
 /**
  * TODO: make the path black, so that it will create when you walk it
@@ -44,6 +41,8 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 	Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Ytop) + "px"))
 	js.Global().Call("Hero", Hero.Ctxh)
 
+	pathArena.ColorWhenPass(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)
+
 	return nil
 }
 
@@ -56,11 +55,12 @@ func MoveHeroX(this js.Value, args []js.Value) interface{} {
 
 		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("right").Float())-20 > pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Xright
 		if heroSurpassTheBlock {
-			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Xright {
+			if pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Xright {
 				return nil
 			}
 
 			Hero.PathCurrentIn.Num2 = Hero.PathCurrentIn.Num2 + 1
+			pathArena.ColorWhenPass(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)
 		}
 
 	}
@@ -69,15 +69,14 @@ func MoveHeroX(this js.Value, args []js.Value) interface{} {
 			return nil
 		}
 
-		fmt.Println(pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2))
-		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())-30 < pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Xleft
+		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())+30 < pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Xleft
 		if heroSurpassTheBlock {
-			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Xleft {
-				//fmt.Println(int(Hero.Hero.Call("getBoundingClientRect").Get("left").Float())-30, pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Xleft)
+			if pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Xleft {
 				return nil
 			}
 
 			Hero.PathCurrentIn.Num2 = Hero.PathCurrentIn.Num2 - 1
+			pathArena.ColorWhenPass(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)
 		}
 
 	}
@@ -96,14 +95,14 @@ func MoveHeroY(this js.Value, args []js.Value) interface{} {
 			return nil
 		}
 
-		//fmt.Println(pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Ybottom)
 		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("bottom").Float()) > pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Ybottom
 		if heroSurpassTheBlock {
-			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Ybottom {
+			if pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Ybottom {
 				return nil
 			}
 
 			Hero.PathCurrentIn.Num1 = Hero.PathCurrentIn.Num1 + 1
+			pathArena.ColorWhenPass(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)
 		}
 	}
 	if int(args[0].Float()) == -1 {
@@ -113,11 +112,12 @@ func MoveHeroY(this js.Value, args []js.Value) interface{} {
 
 		heroSurpassTheBlock := int(Hero.Hero.Call("getBoundingClientRect").Get("top").Float()) < pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Coordination.Ytop
 		if heroSurpassTheBlock {
-			if !pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Ytop {
+			if pathArena.Path.Path[pathArena.CalculateKey(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)].Wall.Ytop {
 				return nil
 			}
 
 			Hero.PathCurrentIn.Num1 = Hero.PathCurrentIn.Num1 - 1
+			pathArena.ColorWhenPass(Hero.PathCurrentIn.Num1, Hero.PathCurrentIn.Num2)
 		}
 	}
 

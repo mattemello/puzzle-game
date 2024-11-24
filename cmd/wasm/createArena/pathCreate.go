@@ -1,7 +1,6 @@
 package createarena
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 	"syscall/js"
@@ -14,6 +13,23 @@ var Path strctVar.ControllPath
 
 func CalculateKey(num1, num2 int) string {
 	return strconv.Itoa(num1) + strconv.Itoa(num2)
+}
+
+func ColorWhenPass(num1, num2 int) {
+
+	if !Path.Path[CalculateKey(num1, num2)].Wall.Ybottom {
+		js.Global().Call("colorPath", Path.Path[CalculateKey(num1+1, num2)].Ctx, "#313244")
+	}
+	if !Path.Path[CalculateKey(num1, num2)].Wall.Ytop {
+		js.Global().Call("colorPath", Path.Path[CalculateKey(num1-1, num2)].Ctx, "#313244")
+	}
+	if !Path.Path[CalculateKey(num1, num2)].Wall.Xright {
+		js.Global().Call("colorPath", Path.Path[CalculateKey(num1, num2+1)].Ctx, "#313244")
+	}
+	if !Path.Path[CalculateKey(num1, num2)].Wall.Xleft {
+		js.Global().Call("colorPath", Path.Path[CalculateKey(num1, num2-1)].Ctx, "#313244")
+	}
+
 }
 
 func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
@@ -89,7 +105,6 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 	newBlock.Wall.Ybottom = true
 
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
-	js.Global().Call("colorPath", newBlock.Ctx, "#313244")
 
 	return newBlock
 }
@@ -112,6 +127,8 @@ func CreateThePath() {
 
 	var coo strctVar.Coordination
 	coo.Xleft = int(aren.Call("getBoundingClientRect").Get("left").Float())
+	coo.Xright = int(aren.Call("getBoundingClientRect").Get("right").Float())
+	coo.Ybottom = int(aren.Call("getBoundingClientRect").Get("bottom").Float())
 	coo.Ytop = int(aren.Call("getBoundingClientRect").Get("top").Float())
 
 	ctx := aren.Call("getContext", "2d")
@@ -119,42 +136,36 @@ func CreateThePath() {
 
 	Path.ArrayPath[0] = CalculateKey(num1, num2)
 
-	Path.Path[Path.ArrayPath[0]] = &strctVar.Path{Number1: num1, Number2: num2, Arena: aren, Ctx: ctx, Coordination: coo}
-
-	fmt.Println("in the for")
+	Path.Path[Path.ArrayPath[0]] = &strctVar.Path{Number1: num1, Number2: num2, Arena: aren, Ctx: ctx, Coordination: coo, Wall: strctVar.Wall{Xleft: true, Xright: true, Ytop: true, Ybottom: true}}
 
 	for i := 1; i < dimensionPath; i++ {
 		block := chooseThePath(*Path.Path[Path.ArrayPath[i-1]], i)
 		Path.ArrayPath[i] = CalculateKey(block.Number1, block.Number2)
 		Path.Path[Path.ArrayPath[i]] = &block
+
 	}
 
 	var wall int
 	for key, ele := range Path.Path {
 		wall = 0
 
-		if n, exist := Path.Path[CalculateKey(ele.Number1, ele.Number2+1)]; exist {
-			fmt.Println(exist, key, n, " enter in the path right")
+		if _, exist := Path.Path[CalculateKey(ele.Number1, ele.Number2+1)]; exist {
 			Path.Path[key].Wall.Xright = false
 			wall++
 		}
-		if n, exist := Path.Path[CalculateKey(ele.Number1, ele.Number2-1)]; exist {
-			fmt.Println(exist, key, n, "enter in the path left")
+		if _, exist := Path.Path[CalculateKey(ele.Number1, ele.Number2-1)]; exist {
 			Path.Path[key].Wall.Xleft = false
 			wall++
 		}
-		if n, exist := Path.Path[CalculateKey(ele.Number1+1, ele.Number2)]; exist {
-			fmt.Println(exist, key, n, "enter in the path bottom")
+		if _, exist := Path.Path[CalculateKey(ele.Number1+1, ele.Number2)]; exist {
 			Path.Path[key].Wall.Ybottom = false
 			wall++
 		}
-		if n, exist := Path.Path[CalculateKey(ele.Number1-1, ele.Number2)]; exist {
-			fmt.Println(exist, key, n, "enter in the path top")
+		if _, exist := Path.Path[CalculateKey(ele.Number1-1, ele.Number2)]; exist {
 			Path.Path[key].Wall.Ytop = false
 			wall++
 		}
 
-		//fmt.Println(key, ele)
 		error.AssertError(wall == 0, "error in the creation of the path")
 
 	}

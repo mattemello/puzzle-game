@@ -6,5 +6,5 @@ clear:
 cmd/wasm/main:
 	cd cmd/wasm & GOOS=js GOARCH=wasm go build -o ./assets/main.wasm
 
-cmd/server/main:
+server:
 	go run cmd/server/main.go
