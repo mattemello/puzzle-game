@@ -10,6 +10,8 @@ var Screen strctVar.Screen
 var Arena strctVar.TheArena
 var doc = js.Global().Get("document")
 
+// TODO: scale with the monitor resolution;
+
 func CreateTheArena(this js.Value, args []js.Value) interface{} {
 
 	Arena.DimensionCol = 10

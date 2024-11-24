@@ -3,18 +3,17 @@ const go = new Go();
 
 //TODO: use the map for mapping the key (←↓↑→) or (wasd)
 
-
 document.addEventListener('keydown', function(event) {
-    if (event.key == "l") {
+    if (event.key == "l" || event.key == "d") {
         MoveHeroX(1);
     }
-    if (event.key == "h") {
+    if (event.key == "h" || event.key == "a") {
         MoveHeroX(-1);
     }
-    if (event.key == "k") {
+    if (event.key == "k" || event.key == "w") {
         MoveHeroY(-1);
     }
-    if (event.key == "j") {
+    if (event.key == "j" || event.key == "s") {
         MoveHeroY(1);
     }
     if (event.key == "L") {

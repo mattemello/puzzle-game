@@ -17,9 +17,7 @@ import (
 */
 
 /**
- * TODO: make the path black, so that it will create when you walk it
- * maybe its possible to take the element near the hero, save them and say if they are walkable or not
- * so i can color the element walkable
+ * TODO: create portal for compleate the level.
  **/
 
 var Hero strctVar.TheHero
