@@ -12,7 +12,7 @@ import (
 var Path strctVar.ControllPath
 
 func CalculateKey(num1, num2 int) string {
-	return strconv.Itoa(num1) + strconv.Itoa(num2)
+	return strconv.Itoa(num1) + "-" + strconv.Itoa(num2)
 }
 
 func ColorWhenPass(num1, num2 int) {
@@ -31,6 +31,8 @@ func ColorWhenPass(num1, num2 int) {
 	}
 
 }
+
+// TODO: make not do duplicate
 
 func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 
@@ -92,7 +94,7 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 		js.Global().Get("console").Call("error", "Error - Error in the creation of the path, value not good")
 	}
 
-	newBlock.Arena = doc.Call("getElementById", "arena"+strconv.Itoa(newBlock.Number1)+strconv.Itoa(newBlock.Number2))
+	newBlock.Arena = doc.Call("getElementById", "arena"+CalculateKey(newBlock.Number1, newBlock.Number2))
 
 	newBlock.Coordination.Xleft = int(newBlock.Arena.Call("getBoundingClientRect").Get("left").Float())
 	newBlock.Coordination.Xright = int(newBlock.Arena.Call("getBoundingClientRect").Get("right").Float())
@@ -105,6 +107,7 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 	newBlock.Wall.Ybottom = true
 
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
+	js.Global().Call("colorPath", newBlock.Ctx, "#313244")
 
 	return newBlock
 }
@@ -113,7 +116,7 @@ func CreateThePath() {
 
 	dimensionPath := 0
 
-	for !(dimensionPath > 10 && dimensionPath < (Arena.DimensionCol*Arena.DimensionRaw)/2) {
+	for !(dimensionPath > (Arena.DimensionCol) && dimensionPath < (Arena.DimensionCol*Arena.DimensionRaw)/3) {
 		dimensionPath = rand.Intn(Arena.DimensionRaw * Arena.DimensionCol)
 	}
 
@@ -123,7 +126,7 @@ func CreateThePath() {
 	num1 := rand.Intn(Arena.DimensionCol)
 	num2 := rand.Intn(Arena.DimensionRaw)
 
-	aren := doc.Call("getElementById", "arena"+strconv.Itoa(num1)+strconv.Itoa(num2))
+	aren := doc.Call("getElementById", "arena"+CalculateKey(num1, num2))
 
 	var coo strctVar.Coordination
 	coo.Xleft = int(aren.Call("getBoundingClientRect").Get("left").Float())

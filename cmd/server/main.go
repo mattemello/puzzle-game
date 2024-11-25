@@ -14,8 +14,6 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("./assets/")))
 
-	log.Println(os.LookupEnv("PORT"))
-
 	srv := &http.Server{
 		Addr:    os.Getenv("PORT"),
 		Handler: mux,
