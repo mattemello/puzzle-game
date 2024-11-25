@@ -107,7 +107,6 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 	newBlock.Wall.Ybottom = true
 
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
-	js.Global().Call("colorPath", newBlock.Ctx, "#313244")
 
 	return newBlock
 }
