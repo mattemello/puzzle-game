@@ -5,21 +5,25 @@
     <meta charset="utf-8" />
     <title>Puzzle Game</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/wasm_exec.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/creationIndex.js"></script>
 </head>
 
-<body id="body" style="align-items: center; flex-direction: column; justify-content: center; display: flex;">
+<body onload="init()" id="body"
+    style="align-items: center; flex-direction: column; justify-content: center; display: flex; margin: 0px; padding: 0px; overflow-y: hidden;">
 
-    <div id="iperTitle">
+    <div id="bg-canvas" style="padding: 0px; margin: 0px; line-height: 0;">
     </div>
+    <div id="uicontainer">
+        <div id="iperTitle">
+        </div>
 
-    <div id="pressToPlay" class="pressToPlay">
-        <a href="game.html">Go and play</a><br>
-    </div>
-    <br>
-    <div id="pressToPlay" class="pressToPlay">
-        <a href="#">Tutorial</a>
+        <div id="pressToPlay" class="pressToPlay">
+            <a href="game.html">Go and play</a><br>
+        </div>
+        <br>
+        <div id="pressToPlay" class="pressToPlay">
+            <a href="#">Tutorial</a>
+        </div>
     </div>
 
 </body>

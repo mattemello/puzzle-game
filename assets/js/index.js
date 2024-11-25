@@ -16,19 +16,19 @@ document.addEventListener('keydown', function(event) {
     if (event.key == "j" || event.key == "s") {
         MoveHeroY(1);
     }
-    if (event.key == "L") {
+    if (event.key == "L" || event.key == "D") {
         MoveHeroX(1);
         MoveHeroX(1);
     }
-    if (event.key == "H") {
+    if (event.key == "H" || event.key == "A") {
         MoveHeroX(-1);
         MoveHeroX(-1);
     }
-    if (event.key == "K") {
+    if (event.key == "K" || event.key == "W") {
         MoveHeroY(-1);
         MoveHeroY(-1);
     }
-    if (event.key == "J") {
+    if (event.key == "J" || event.key == "S") {
         MoveHeroY(1);
         MoveHeroY(1);
     }
