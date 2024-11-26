@@ -125,3 +125,16 @@ function Hero(theHero) {
     theHero.stroke();
 }
 
+function levelCompleate() {
+    let text = "Level compleate!!\ndo you want to continue?"
+
+    if (confirm(text)) {
+        location.reload()
+    } else {
+
+    }
+}
+
+function colorPortal(ctx) {
+    ctx.clearRect(60, 25, 130, 100);
+}

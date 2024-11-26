@@ -14,19 +14,19 @@
     align-items: center;
 
 }
-a:link {
+p:link {
     color: #cdd6f4;
     text-decoration: none;
 }
 
-a:visited {
+p:visited {
     color: #cdd6f4;
   text-decoration: none;
 }
 
 .pressToPlay:active {
     text-decoration: none;
-    color:red;
+    color:#cdd6f4;
     box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
 }
 

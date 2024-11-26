@@ -17,17 +17,31 @@ func CalculateKey(num1, num2 int) string {
 
 func ColorWhenPass(num1, num2 int) {
 
-	if !Path.Path[CalculateKey(num1, num2)].Wall.Ybottom {
+	pathCurrentIn := Path.Path[CalculateKey(num1, num2)]
+
+	if !pathCurrentIn.Wall.Ybottom {
 		js.Global().Call("colorPath", Path.Path[CalculateKey(num1+1, num2)].Ctx, "#313244")
+		if Path.Path[CalculateKey(num1+1, num2)].Portal {
+			js.Global().Call("colorPortal", Path.Path[CalculateKey(num1+1, num2)].Ctx)
+		}
 	}
-	if !Path.Path[CalculateKey(num1, num2)].Wall.Ytop {
+	if !pathCurrentIn.Wall.Ytop {
 		js.Global().Call("colorPath", Path.Path[CalculateKey(num1-1, num2)].Ctx, "#313244")
+		if Path.Path[CalculateKey(num1-1, num2)].Portal {
+			js.Global().Call("colorPortal", Path.Path[CalculateKey(num1-1, num2)].Ctx)
+		}
 	}
-	if !Path.Path[CalculateKey(num1, num2)].Wall.Xright {
+	if !pathCurrentIn.Wall.Xright {
 		js.Global().Call("colorPath", Path.Path[CalculateKey(num1, num2+1)].Ctx, "#313244")
+		if Path.Path[CalculateKey(num1, num2+1)].Portal {
+			js.Global().Call("colorPortal", Path.Path[CalculateKey(num1, num2+1)].Ctx)
+		}
 	}
-	if !Path.Path[CalculateKey(num1, num2)].Wall.Xleft {
+	if !pathCurrentIn.Wall.Xleft {
 		js.Global().Call("colorPath", Path.Path[CalculateKey(num1, num2-1)].Ctx, "#313244")
+		if Path.Path[CalculateKey(num1, num2-1)].Portal {
+			js.Global().Call("colorPortal", Path.Path[CalculateKey(num1, num2-1)].Ctx)
+		}
 	}
 
 }
@@ -106,6 +120,8 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 	newBlock.Wall.Xright = true
 	newBlock.Wall.Ybottom = true
 
+	newBlock.Portal = false
+
 	newBlock.Ctx = newBlock.Arena.Call("getContext", "2d")
 
 	return newBlock
@@ -138,7 +154,7 @@ func CreateThePath() {
 
 	Path.ArrayPath[0] = CalculateKey(num1, num2)
 
-	Path.Path[Path.ArrayPath[0]] = &strctVar.Path{Number1: num1, Number2: num2, Arena: aren, Ctx: ctx, Coordination: coo, Wall: strctVar.Wall{Xleft: true, Xright: true, Ytop: true, Ybottom: true}}
+	Path.Path[Path.ArrayPath[0]] = &strctVar.Path{Number1: num1, Number2: num2, Arena: aren, Ctx: ctx, Coordination: coo, Wall: strctVar.Wall{Xleft: true, Xright: true, Ytop: true, Ybottom: true}, Portal: false}
 
 	for i := 1; i < dimensionPath; i++ {
 		block := chooseThePath(*Path.Path[Path.ArrayPath[i-1]], i)
@@ -171,5 +187,7 @@ func CreateThePath() {
 		error.AssertError(wall == 0, "error in the creation of the path")
 
 	}
+
+	createPortaleWin()
 
 }

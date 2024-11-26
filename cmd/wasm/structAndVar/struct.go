@@ -23,6 +23,7 @@ type Path struct {
 	Number2      int
 	Coordination Coordination
 	Wall         Wall
+	Portal       bool
 }
 
 /* type MarginPath struct {

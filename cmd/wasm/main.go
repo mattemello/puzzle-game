@@ -25,6 +25,12 @@ var move strctVar.Coordination
 
 var doc = js.Global().Get("document")
 
+func controllIfOnThePortal(n strctVar.Screen) {
+	if pathArena.Path.Path[pathArena.CalculateKey(n.Num1, n.Num2)].Portal {
+		pathArena.OnThePortal()
+	}
+}
+
 func CreateTheHero(this js.Value, args []js.Value) interface{} {
 
 	Hero.Position.Xleft = pathArena.Path.Path[pathArena.Path.ArrayPath[0]].Coordination.Xleft - 40
@@ -83,6 +89,8 @@ func MoveHeroX(this js.Value, args []js.Value) interface{} {
 
 	Hero.Style.Call("setProperty", "left", (strconv.Itoa(Hero.Position.Xleft) + "px"))
 
+	controllIfOnThePortal(Hero.PathCurrentIn)
+
 	return nil
 }
 
@@ -122,6 +130,8 @@ func MoveHeroY(this js.Value, args []js.Value) interface{} {
 	Hero.Position.Ytop += 10 * int(args[0].Float())
 
 	Hero.Style.Call("setProperty", "top", (strconv.Itoa(Hero.Position.Ytop) + "px"))
+
+	controllIfOnThePortal(Hero.PathCurrentIn)
 
 	return nil
 }
