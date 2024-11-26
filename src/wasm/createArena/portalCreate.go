@@ -5,8 +5,6 @@ import (
 	"syscall/js"
 )
 
-// todo: maybe put the portal in the block more distant from the start?
-
 func createPortaleWin() {
 	value := 0
 

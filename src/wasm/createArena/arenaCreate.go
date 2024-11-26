@@ -3,7 +3,7 @@ package createarena
 import (
 	"syscall/js"
 
-	strctVar "github.com/mattemello/puzzle-game/src/wasm/structAndVar"
+	strctVar "github.com/mattemello/puzzle-game/cmd/wasm/structAndVar"
 )
 
 var Screen strctVar.Screen

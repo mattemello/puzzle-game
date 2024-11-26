@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"syscall/js"
 
-	pathArena "github.com/mattemello/puzzle-game/src/wasm/createArena"
-	strctVar "github.com/mattemello/puzzle-game/src/wasm/structAndVar"
+	pathArena "github.com/mattemello/puzzle-game/cmd/wasm/createArena"
+	strctVar "github.com/mattemello/puzzle-game/cmd/wasm/structAndVar"
 )
 
 /* NOTE: the approssimative position of the circle hero:
@@ -13,8 +13,12 @@ import (
  * left: ~(-30)
  * top: ~(-8)
  * bottom: ~(-8)
- * MOVE maybe done
- */
+	MOVE maybe done
+*/
+
+/**
+ * TODO: create portal for compleate the level.
+ **/
 
 var Hero strctVar.TheHero
 var move strctVar.Coordination
@@ -46,6 +50,7 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 	return nil
 }
 
+// TODO: implement a AABB function?
 func MoveHeroX(this js.Value, args []js.Value) interface{} {
 
 	if int(args[0].Float()) == 1 {

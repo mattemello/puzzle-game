@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"syscall/js"
 
-	error "github.com/mattemello/puzzle-game/src/wasm/Errors"
-	strctVar "github.com/mattemello/puzzle-game/src/wasm/structAndVar"
+	error "github.com/mattemello/puzzle-game/cmd/wasm/Errors"
+	strctVar "github.com/mattemello/puzzle-game/cmd/wasm/structAndVar"
 )
 
 var Path strctVar.ControllPath
