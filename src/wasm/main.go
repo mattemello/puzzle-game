@@ -50,6 +50,7 @@ func CreateTheHero(this js.Value, args []js.Value) interface{} {
 	return nil
 }
 
+// TODO: implement a AABB function?
 func MoveHeroX(this js.Value, args []js.Value) interface{} {
 
 	if int(args[0].Float()) == 1 {
