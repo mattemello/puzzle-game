@@ -105,7 +105,7 @@ func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 
 	default:
 		js.Global().Call("alert", "Error - Error in the creation of the path, value not good")
-		js.Global().Get("console").Call("error", "Error - Error in the creation of the path, value not good")
+		error.AssertError(true, "Error - Error in the creation of the path, value not good")
 	}
 
 	newBlock.Arena = doc.Call("getElementById", "arena"+CalculateKey(newBlock.Number1, newBlock.Number2))
