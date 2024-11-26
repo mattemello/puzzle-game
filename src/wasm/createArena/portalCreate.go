@@ -5,6 +5,8 @@ import (
 	"syscall/js"
 )
 
+//todo: maybe create the portal in the more distant place from the start
+
 func createPortaleWin() {
 	value := 0
 
