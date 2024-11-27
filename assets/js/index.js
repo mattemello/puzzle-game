@@ -4,32 +4,33 @@ const go = new Go();
 //TODO: use the map for mapping the key (←↓↑→) or (wasd)
 
 document.addEventListener('keydown', function(event) {
-    if (event.key == "l" || event.key == "d") {
+
+    if (event.key == "L" || event.key == "D" || (event.shiftKey && event.key == "ArrowRight")) {
+        MoveHeroX(1);
         MoveHeroX(1);
     }
-    if (event.key == "h" || event.key == "a") {
+    if (event.key == "H" || event.key == "A" || (event.shiftKey && event.key == "ArrowLeft")) {
+        MoveHeroX(-1);
         MoveHeroX(-1);
     }
-    if (event.key == "k" || event.key == "w") {
+    if (event.key == "K" || event.key == "W" || (event.shiftKey && event.key == "ArrowUp")) {
+        MoveHeroY(-1);
         MoveHeroY(-1);
     }
-    if (event.key == "j" || event.key == "s") {
+    if (event.key == "J" || event.key == "S" || (event.shiftKey && event.key == "ArrowDown")) {
+        MoveHeroY(1);
         MoveHeroY(1);
     }
-    if (event.key == "L" || event.key == "D") {
-        MoveHeroX(1);
+    if (event.key == "l" || event.key == "d" || event.key == "ArrowRight") {
         MoveHeroX(1);
     }
-    if (event.key == "H" || event.key == "A") {
-        MoveHeroX(-1);
+    if (event.key == "h" || event.key == "a" || event.key == "ArrowLeft") {
         MoveHeroX(-1);
     }
-    if (event.key == "K" || event.key == "W") {
-        MoveHeroY(-1);
+    if (event.key == "k" || event.key == "w" || event.key == "ArrowUp") {
         MoveHeroY(-1);
     }
-    if (event.key == "J" || event.key == "S") {
-        MoveHeroY(1);
+    if (event.key == "j" || event.key == "s" || event.key == "ArrowDown") {
         MoveHeroY(1);
     }
 
