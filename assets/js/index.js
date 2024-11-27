@@ -34,6 +34,15 @@ document.addEventListener('keydown', function(event) {
 
 });
 
+var timeOutFunctionId;
+
+window.addEventListener('resize', function() {
+
+    clearTimeout(timeOutFunctionId);
+
+    timeOutFunctionId = setTimeout(window.location.reload(), 100000)
+});
+
 let canvs = {
     element: [],
     ctx: [],
