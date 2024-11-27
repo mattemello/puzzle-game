@@ -1,8 +1,6 @@
 const go = new Go();
 //wasm.CreateTheArena();
 
-//TODO: use the map for mapping the key (←↓↑→) or (wasd)
-
 document.addEventListener('keydown', function(event) {
 
     if (event.key == "L" || event.key == "D" || (event.shiftKey && event.key == "ArrowRight")) {

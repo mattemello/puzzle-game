@@ -46,8 +46,6 @@ func ColorWhenPass(num1, num2 int) {
 
 }
 
-// TODO: make not do duplicate
-
 func chooseThePath(block strctVar.Path, dimensioPathNow int) strctVar.Path {
 
 	possibleDirection := make(map[int]string)
