@@ -34,4 +34,6 @@ This is little game created by me. It's use golang, javascript and wasm. <br>
 The visualizatios it's menaged by the js. <br>
 The path, the hero, the arena it's created and menaged by the Golang file. <br>
 The server is a Golang server.
+
+For moving you can use vim motion, wasd and the arrow keys.
  
