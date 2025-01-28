@@ -12,7 +12,7 @@ first clone the repository
 git clone https://github.com/mattemello/puzzle-game
 ```
 
-Then you need to have ``` go installed https://go.dev/doc/install ```.<br>
+Then you need to have  [go installed](https://go.dev/doc/install ).<br>
 Extract the wasm file ``` cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" THIS_REPOSITORY/assets/js``` (if it's not in $(go env GOROOT)/... you have to search it).
 
 (you need to set a .env file for the port of the server)
